@@ -129,8 +129,7 @@ Possim = xout(:,1);
 Velsim = xout(:, 2);
 usim = arrayfun(@(ti) soln.interp.control(ti), tout);
 
-
-
+%save('MC_uref.mat', "usim")
 figure; clf;
 
 subplot(3,1,1)
