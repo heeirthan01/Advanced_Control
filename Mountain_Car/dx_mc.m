@@ -1,0 +1,13 @@
+function [dx] = dx_mc(t, x, u, p)
+
+
+xpos = x(1, :);
+v = x(2, :);
+
+gt = p.gt;
+et = p.et;
+dx1 = v;
+dx2 = (et * u) - (gt * cos(3*xpos));
+dx = [dx1 ; dx2];
+
+end
