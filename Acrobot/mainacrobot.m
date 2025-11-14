@@ -81,11 +81,11 @@ q2 = soln.grid.state(2,:);
 q1d = soln.grid.state(3,:);
 q2d = soln.grid.state(4,:);
 u = soln.grid.control;
-save('q1ref_PB.mat', 'q1')
-save('q2ref_PB.mat', 'q2')
-save('q1dref_PB.mat', 'q1d')
-save('q2dref_PB.mat', 'q2d')
-save('uref_PB.mat', 'u')
+save('q1ref_AB.mat', 'q1')
+save('q2ref_AB.mat', 'q2')
+save('q1dref_AB.mat', 'q1d')
+save('q2dref_AB.mat', 'q2d')
+save('uref_AB.mat', 'u')
 
 
 figure; clf;
@@ -98,19 +98,19 @@ title('Pendubot movement q1');
 subplot(2,1,2)
 plot(t,q2)
 ylabel('q2')
-title('Pendubot movement q2');
+title('Acrobot movement q2');
 
 figure; clf;
 
 subplot(2,1,1)
 plot(t,q1d)
 ylabel('q1d')
-title('Pendubot Velcoity q1')
+title('Acrobot Velcoity q1')
 
 subplot(2,1,2)
 plot(t,q2d)
 ylabel('q2d')
-title('Pendubot Velcoity q2')
+title('Acrobot Velcoity q2')
 
 % 
 % figure; clf;
