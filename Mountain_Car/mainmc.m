@@ -69,6 +69,10 @@ z = soln.interp.state(t);
 x = z(1,:);
 v = z(2,:);
 u = soln.interp.control(t);
+
+save('MC_posrefnew.mat', "x");
+save('MC_velrefnew.mat', "v");
+save('MC_urefnew.mat', "u");
 disp(soln.grid.time(end))
 tGrid = soln.grid.time;
 xGrid = soln.grid.state(1,:);

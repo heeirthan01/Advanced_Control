@@ -3,12 +3,13 @@ close;
 
 %https://underactuated.mit.edu/lqr.html for the linearization et.c.
 
-poss = load('MC_posref.mat'); %pos ref from trajopt
-vels = load('MC_velref.mat'); %vel ref from trajopt
-us = load('MC_uref.mat');
-posref = poss.Possim;
-velref = vels.Velsim;
-u_ref = us.usim;
+poss = load('MC_posrefnew.mat'); %pos ref from trajopt
+vels = load('MC_velrefnew.mat'); %vel ref from trajopt
+us = load('MC_urefnew.mat');
+posref = poss.x;
+velref = vels.v;
+
+u_ref = us.u;
 
 dt = 0.1;
 totalsim = 95;
