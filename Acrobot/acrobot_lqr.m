@@ -112,14 +112,15 @@ subplot(2,1,1)
 plot(t,x_traj(:,1), 'LineWidth',2)
 hold on;
 plot(t, q1ref, 'r--', 'LineWidth',2)
-title('Q1 cOmparison to Ref')
+title('Q1 Comparison: LQR vs TO')
+legend('LQR', 'TO')
 
 subplot(2,1,2)
 plot(t, x_traj(:,2), 'LineWidth',2)
 hold on
 plot(t, q2ref, 'r--', 'LineWidth',2)
-title('q2 Comparison to Ref')
-
+title('q2 Comparison: LQR vs TO')
+legend('LQR', 'TO')
 
 %% ODE45 Simulation
 
@@ -145,17 +146,19 @@ plot(t, q1sim, 'LineWidth',2)
 hold on
 plot(t, q1ref, 'r--', 'Linewidth', 2)
 title('q1 Comparison ODE45 vs OL')
+legend('ODE', 'TO')
 subplot(3,1,2)
 plot(t, q2sim, 'LineWidth',2)
 hold on
 plot(t, q2ref, 'r--', 'Linewidth', 2)
 title('q2 Comparison ODE45 vs OL')
+legend('ODE', 'TO')
 subplot(3,1,3)
 plot(t, u_traj, 'LineWidth',2)
 hold on
 plot(t, uref, 'r--', 'Linewidth', 2)
 title('Control Comparison ODE45 vs OL')
-
+legend('ODE', 'TO')
 %% Animate Acrobot
 L1 = p.l1;
 L2 = p.l2;  

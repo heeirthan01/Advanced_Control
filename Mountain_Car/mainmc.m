@@ -70,9 +70,9 @@ x = z(1,:);
 v = z(2,:);
 u = soln.interp.control(t);
 
-save('MC_posrefnew.mat', "x");
-save('MC_velrefnew.mat', "v");
-save('MC_urefnew.mat', "u");
+% save('MC_posrefnew.mat', "x");
+% save('MC_velrefnew.mat', "v");
+% save('MC_urefnew.mat', "u");
 disp(soln.grid.time(end))
 tGrid = soln.grid.time;
 xGrid = soln.grid.state(1,:);
@@ -95,33 +95,33 @@ for i = 1:length(xGrid)
 end
 
 % Plot the state and control:
-figure(2); clf; 
-plot(t,u, 'LineWidth',3)
-title('Control Evolution')
-figure(3); clf;
-plot(x, sin(3*x));
-hold on
-plot(xhill, yhill, 'k--')
-legend('Simulation','Hills')
-title('State evolution')
+% figure(2); clf; 
+% plot(t,u, 'LineWidth',3)
+% title('Control Evolution')
+% figure(3); clf;
+% plot(x, sin(3*x));
+% hold on
+% plot(xhill, yhill, 'k--')
+% legend('Simulation','Hills')
+% title('State evolution')
 
-figure(4); clf;
-
-subplot(2,2,1); hold on;
-plot(t,x);
-plot(tGrid,xGrid,'ko','MarkerSize',5,'LineWidth',3);
-ylabel('x');
-
-subplot(2,2,3); hold on;
-plot(t,v);
-plot(tGrid,vGrid,'ko','MarkerSize',5,'LineWidth',3);
-ylabel('v');
-
-subplot(2,2,4); hold on;
-plot(tGrid,uGrid,'ko','MarkerSize',5,'LineWidth',3);
-plot(t,u);
-ylabel('u');
-disp(max(soln.info.error))
+% figure(4); clf;
+% 
+% subplot(2,2,1); hold on;
+% plot(t,x);
+% plot(tGrid,xGrid,'ko','MarkerSize',5,'LineWidth',3);
+% ylabel('x');
+% 
+% subplot(2,2,3); hold on;
+% plot(t,v);
+% plot(tGrid,vGrid,'ko','MarkerSize',5,'LineWidth',3);
+% ylabel('v');
+% 
+% subplot(2,2,4); hold on;
+% plot(tGrid,uGrid,'ko','MarkerSize',5,'LineWidth',3);
+% plot(t,u);
+% ylabel('u');
+% disp(max(soln.info.error))
 %% ODE45 SIMULATION
 X0 = soln.interp.state(0);
 tsPan = [soln.grid.time(1), soln.grid.time(end)];
@@ -133,15 +133,27 @@ Possim = xout(:,1);
 Velsim = xout(:, 2);
 usim = arrayfun(@(ti) soln.interp.control(ti), tout);
 
-%save('MC_uref.mat', "usim")
-figure; clf;
+% x = interp1(tout, x, t, 'pchip'); %to match reftraj
+% v = interp1(tout, v, t, 'pchip');
 
-subplot(3,1,1)
-plot(tout, Possim)
+figure; clf;
+plot(tout, Possim, 'LineWidth',2)
+hold on 
+plot(t,x, 'k--','LineWidth',2)
 ylabel('Pos')
-subplot(3,1,2)
-plot(tout, Velsim)
+title('Car position ODE vs TO')
+legend('ODE', 'TO')
+figure; clf;
+plot(tout, Velsim, 'LineWidth',2)
+hold on 
+plot(t,v, 'k--','LineWidth',2)
+title('Car velocity ODE vs TO')
 ylabel('Vel')
-subplot(3,1,3)
-plot(tout, usim)
-ylabel('Control')
+legend('ODE', 'TO')
+figure; clf;
+plot(tout, usim, 'LineWidth',2)
+hold on 
+plot(t,u, 'k--','LineWidth',2)
+title('Car Controls ODE vs TO')
+ylabel('u')
+legend('ODE', 'TO')

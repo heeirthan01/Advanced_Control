@@ -81,11 +81,11 @@ q2 = soln.grid.state(2,:);
 q1d = soln.grid.state(3,:);
 q2d = soln.grid.state(4,:);
 u = soln.grid.control;
-save('q1ref_AB.mat', 'q1')
-save('q2ref_AB.mat', 'q2')
-save('q1dref_AB.mat', 'q1d')
-save('q2dref_AB.mat', 'q2d')
-save('uref_AB.mat', 'u')
+% save('q1ref_AB.mat', 'q1')
+% save('q2ref_AB.mat', 'q2')
+% save('q1dref_AB.mat', 'q1d')
+% save('q2dref_AB.mat', 'q2d')
+% save('uref_AB.mat', 'u')
 
 
 figure; clf;
@@ -93,7 +93,7 @@ figure; clf;
 subplot(2,1,1)
 plot(t,q1)
 ylabel('q1')
-title('Pendubot movement q1');
+title('Acrobot movement q1');
 
 subplot(2,1,2)
 plot(t,q2)
@@ -132,17 +132,26 @@ usim = arrayfun(@(ti) soln.interp.control(ti), tout);
 
 
 figure; clf;
-
-subplot(3,1,1)
-plot(tout, q1sim)
+plot(tout, q1sim, 'LineWidth',2)
+hold on
+plot(t, q1, 'k--' ,'LineWidth',2)
 ylabel('Posq1')
-subplot(3,1,2)
-plot(tout, q2sim)
+title('Q1 ODE vs TO')
+legend('ODE', 'TO')
+figure;clf;
+plot(tout, q2sim, 'LineWidth',2)
+hold on
+plot(t,q2, 'k--','LineWidth',2)
 ylabel('Posq2')
-subplot(3,1,3)
-plot(tout, usim)
+title('Q2 ODE vs TO')
+legend('ODE', 'TO')
+figure;clf;
+plot(tout, usim, 'LineWidth',2)
+hold on;
+plot(t, u, 'k--', 'LineWidth',2)
 ylabel('Control')
-
+title('u ODE vs TO')
+legend('ODE', 'TO')
 %% Animate Pendubot
 L1 = p.l1;
 L2 = p.l2;  

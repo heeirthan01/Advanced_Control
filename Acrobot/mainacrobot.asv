@@ -24,7 +24,7 @@ X1 = [-pi/4,0,0,0];
 X2 = [pi/4,0,0,0];
 
 %dynamics roll and cost fcn
-problem.func.dynamics = @(t, x, u)(dx_pb(t,x,u,p));
+problem.func.dynamics = @(t, x, u)(dx_ab(t,x,u,p));
 Qf = diag([50, 50, 2000, 2000]);
 problem.func.pathObj = @(t,x,u) (0*u.^2 + 1); %minimize torque
 %problem.func.bndObj = [];
@@ -81,11 +81,11 @@ q2 = soln.grid.state(2,:);
 q1d = soln.grid.state(3,:);
 q2d = soln.grid.state(4,:);
 u = soln.grid.control;
-% save('q1ref_PB.mat', 'q1')
-% save('q2ref_PB.mat', 'q2')
-% save('q1dref_PB.mat', 'q1d')
-% save('q2dref_PB.mat', 'q2d')
-% save('uref_PB.mat', 'u')
+% save('q1ref_AB.mat', 'q1')
+% save('q2ref_AB.mat', 'q2')
+% save('q1dref_AB.mat', 'q1d')
+% save('q2dref_AB.mat', 'q2d')
+% save('uref_AB.mat', 'u')
 
 
 figure; clf;
@@ -93,24 +93,24 @@ figure; clf;
 subplot(2,1,1)
 plot(t,q1)
 ylabel('q1')
-title('Pendubot movement q1');
+title('Acrobot movement q1');
 
 subplot(2,1,2)
 plot(t,q2)
 ylabel('q2')
-title('Pendubot movement q2');
+title('Acrobot movement q2');
 
 figure; clf;
 
 subplot(2,1,1)
 plot(t,q1d)
 ylabel('q1d')
-title('Pendubot Velcoity q1')
+title('Acrobot Velcoity q1')
 
 subplot(2,1,2)
 plot(t,q2d)
 ylabel('q2d')
-title('Pendubot Velcoity q2')
+title('Acrobot Velcoity q2')
 
 % 
 % figure; clf;
@@ -124,7 +124,7 @@ X0 = soln.interp.state(0);
 tsPan = [soln.grid.time(1), soln.grid.time(end)];
 
 S = odeset('RelTol',1e-6,'AbsTol',1e-6);  % low resolution
-[tout,xout] = ode45(@(t,x) dx_pb(t,x,soln.interp.control(t),p),tsPan,X0,S);
+[tout,xout] = ode45(@(t,x) dx_ab(t,x,soln.interp.control(t),p),tsPan,X0,S);
 xout(:,1:2) = unwrap(xout(:,1:2));
 q1sim = xout(:,1);
 q2sim = xout(:, 2);
@@ -134,25 +134,22 @@ usim = arrayfun(@(ti) soln.interp.control(ti), tout);
 figure; clf;
 plot(tout, q1sim, 'LineWidth',2)
 hold on
-plot(t, q1, 'k--','LineWidth',2)
-title('ODE vs TO Q1')
-legend('ODE', 'TO')
+plot(t, q1, 'k--' ,'LineWidth',2)
 ylabel('Posq1')
-figure; clf;
+title('Q1 ODE vs TO')
+legend('O')
+figure;clf;
 plot(tout, q2sim, 'LineWidth',2)
 hold on
-plot(t, q2, 'k--','LineWidth',2)
+plot(t,q2, 'k--','LineWidth',2)
 ylabel('Posq2')
-title('ODE vs TO Q2')
-legend('ODE', 'TO')
-figure, clf;
+title('Q2 ODE vs TO')
+figure;clf;
 plot(tout, usim, 'LineWidth',2)
-hold on
-plot(t, u, 'k--','LineWidth',2)
+hold on;
+plot(t, u, 'k--', 'LineWidth',2)
 ylabel('Control')
-title('ODE vs TO u')
-legend('ODE', 'TO')
-
+title('u ODE vs TO')
 %% Animate Pendubot
 L1 = p.l1;
 L2 = p.l2;  

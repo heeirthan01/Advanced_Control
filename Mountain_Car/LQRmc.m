@@ -1,5 +1,5 @@
 clear;
-close;
+close all;
 
 %https://underactuated.mit.edu/lqr.html for the linearization et.c.
 
@@ -80,20 +80,22 @@ subplot(3,1,1)
 plot(t,x_traj(:,1), 'LineWidth',2)
 hold on;
 plot(t, posref, 'r--', 'LineWidth',2)
-title('Position cOmparison to Ref')
+title('Position Comparison: LQR CL vs TO')
+legend('LQR', 'TO')
 
 subplot(3,1,2)
 plot(t, x_traj(:,2), 'LineWidth',2)
 hold on
 plot(t, velref, 'r--', 'LineWidth',2)
-title('Velocity Comparison to Ref')
+title('Velocity Comparison: LQR CL vs TO')
+legend('LQR', 'TO')
 
 subplot(3,1,3)
 plot(t, u_traj, 'LineWidth', 2)
 hold on
 plot(t, uref, 'r--', 'LineWidth',2)
-title('Control COmparison to Ref')
-
+title('Control Comparison: LQR CL vs TO')
+legend('LQR', 'TO')
 
 %% ODE45 Closedloop
 
@@ -117,17 +119,19 @@ subplot(3,1,1)
 plot(t, possim, 'LineWidth',2)
 hold on
 plot(t, posref, 'r--', 'Linewidth', 2)
-title('Position Comparison ODE45 vs OL')
+title('Position Comparison ODE45 vs LQR CL')
+legend('ODE', 'TO')
 subplot(3,1,2)
 plot(t, velsim, 'LineWidth',2)
 hold on
 plot(t, velref, 'r--', 'Linewidth', 2)
-title('Velocity Comparison ODE45 vs OL')
+title('Velocity Comparison ODE45 vs LQR CL')
+legend('ODE', 'TO')
 subplot(3,1,3)
 plot(t, u_traj, 'LineWidth',2)
 hold on
 plot(t, uref, 'r--', 'Linewidth', 2)
-title('Control Comparison ODE45 vs OL')
-
-disp(size(tout))
-disp(size(t))
+title('Control Comparison ODE45 vs LQR CL')
+legend('ODE', 'TO')
+% disp(size(tout))
+% disp(size(t))

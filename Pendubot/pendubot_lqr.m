@@ -137,13 +137,13 @@ subplot(2,1,1)
 plot(t,x_traj(:,1), 'LineWidth',2)
 hold on;
 plot(t, q1ref, 'r--', 'LineWidth',2)
-title('Q1 cOmparison to Ref')
+title('q1 comparison: LQR vs TO')
 
 subplot(2,1,2)
 plot(t, x_traj(:,2), 'LineWidth',2)
 hold on
 plot(t, q2ref, 'r--', 'LineWidth',2)
-title('q2 Comparison to Ref')
+title('q2 comparison: LQR vs TO')
 
 
 %% ODE45 Simulation
@@ -169,7 +169,7 @@ subplot(3,1,1)
 plot(t, q1sim, 'LineWidth',2)
 hold on
 plot(t, q1ref, 'r--', 'Linewidth', 2)
-title('q1 Comparison ODE45 vs OL')
+title('q1 comparison ODE45 vs OL')
 subplot(3,1,2)
 plot(t, q2sim, 'LineWidth',2)
 hold on
