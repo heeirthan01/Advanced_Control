@@ -1,5 +1,6 @@
 function [dx] = dx_ab_lqr(t, x, u, p)
 if any(isnan(x))
+    disp(x)
     error('NaN detected in state BEFORE computing D');
 end
 q1 = x(1);

@@ -102,7 +102,7 @@ for i = 2:steps
 end
 
 
-
+save('ulqr_AB.mat', 'u_traj')
 %% Plotting
 
 t = (0:steps-1) * dt;

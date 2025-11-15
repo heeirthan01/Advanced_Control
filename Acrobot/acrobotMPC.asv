@@ -56,7 +56,7 @@ u_traj(1) = u;
 u_max = 20;
 
 %% MPC Build Equilibrium 1
-
+%Only eq 1 for now
 A = A_fun(eqb(1), eqb(2), eqb(3), eqb(4), 0);
 B = B_fun(eqb(1), eqb(2), eqb(3), eqb(4), 0);
 C = [1 0 0 0;
@@ -100,47 +100,47 @@ end
 Ksave = (R + Z' * Q * Z) \ Z' * Q;
 %% MPC For Equilibrium 2
 
-A2 = A_fun(eqb2(1), eqb2(2), eqb2(3), eqb2(4), 0);
-B2 = B_fun(eqb2(1), eqb2(2), eqb2(3), eqb2(4), 0);
-C2 = [1 0 0 0;
+A = A_fun(eqb(1), eqb(2), eqb(3), eqb(4), 0);
+B = B_fun(eqb(1), eqb(2), eqb(3), eqb(4), 0);
+C = [1 0 0 0;
     0 1 0 0];
 %Euler disc
-A2 = eye(4) + dt*A2;
-B2 = dt * B2;
+A = eye(4) + dt*A;
+B = dt * B;
 
-Aa2 = [A2, zeros(n,op);
-      C2*A2, eye(op)];
-Ba2 = [B2;
-      C2*B2];
+Aa = [A, zeros(n,op);
+      C*A, eye(op)];
+Ba = [B;
+      C*B];
 
-Ca2 = [zeros(op,n), eye(op)];
-na = length(Aa2(:,1));
+Ca = [zeros(op,n), eye(op)];
+na = length(Aa(:,1));
 %Building W
-W2 = zeros(Np*op, na);
+W = zeros(Np*op, na);
 %size(W)
-Anew2 = Aa2;
+Anew = Aa;
 for i = 1:Np
     mrow = (i-1)*op + (1:op); %pick out 1-2,3-4,et.c. for the 2x6 matrixCa*Aa^i
-    W2(mrow,:) = Ca2 * Anew2;
-    Anew2 = Aa2 * Anew2;
+    W(mrow,:) = Ca * Anew;
+    Anew = Aa * Anew;
 end
 %size(W)
 
 nrow = op;
-nu = length(B2(1,:));
+nu = length(B(1,:));
 ncol = nu;
 %Building Z
-Z2 = zeros(Np*nrow, Np*ncol);
+Z = zeros(Np*nrow, Np*ncol);
 for i = 1:Np
     for j = 1:i
-        subblock = Ca2 * Aa2^(i-j) * Ba2;
+        subblock = Ca * Aa^(i-j) * Ba;
         vrow = (i-1) * nrow + [1:nrow];
         vcol = (j-1) * ncol + [1:ncol];
-        Z2(vrow, vcol) = subblock;
+        Z(vrow, vcol) = subblock;
     end
 end
 
-Ksave2 = (R + Z2' * Q * Z2) \ Z2' * Q;
+Ksave = (R + Z' * Q * Z) \ Z' * Q;
 
 
 
@@ -164,6 +164,8 @@ for i = 2:steps
             swflag = 2;
         end
     elseif swflag == 2
+        
+        %disp('Switch 2')
         %Eq1 MPC
         %Linearize A and B about eq1
         % exit when have stayed for a while
@@ -185,21 +187,21 @@ for i = 2:steps
         
         if norm(x(1:2) - eqb(1:2)) < 0.05
             state2cnt = state2cnt + 1;
-            if state2cnt >= 1000 %abt 10 sec
+            if state2cnt >= 500 %abt 5 sec
                 swflag = 3;
             end
         end
     elseif swflag == 3
         x_a = [x - x_prev;
-            C2*x];
-        rp = repmat(eqb2(1:2), Np, 1); %just duplicate and extend ref Np times
-        delta_u = Ksave2 * (rp - W2*x_a);
-
+            C*x];
+        rp = repmat(eqb(1:2), Np, 1); %just duplicate and extend ref Np times
+        delta_u = Ksave * (rp - W*x_a);
+        
         u = u + delta_u(1);
-
+        
         x_prev = x;
         x = rk4_step(@(xx, uu) dx_ab_lqr(0,xx, uu, p), x, u,dt);
-
+        
         %x(1) = wrapToPi(x(1));
         %x(2) = wrapToPi(x(2));
         x_traj(i,:) = x';
@@ -208,7 +210,7 @@ for i = 2:steps
     else
         error('Flag value not valid');
     end 
-    
+
 end
 
 %% Plotting
@@ -231,7 +233,7 @@ title('CONTROLS')
 L1 = p.l1;
 L2 = p.l2;  
 fps = 100;       
-skip = round(length(t)/(fps*10));  
+skip = round(length(t)/(fps*5));  
 
 figure; hold on;
 axis equal;
