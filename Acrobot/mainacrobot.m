@@ -26,7 +26,7 @@ X2 = [pi/4,0,0,0];
 %dynamics roll and cost fcn
 problem.func.dynamics = @(t, x, u)(dx_ab(t,x,u,p));
 Qf = diag([50, 50, 2000, 2000]);
-problem.func.pathObj = @(t,x,u) (0*u.^2 + 1); %minimize torque
+problem.func.pathObj = @(t,x,u) (0*u.^2 + 1); %minimize time
 %problem.func.bndObj = [];
 problem.func.bndObj = @(t0,x0,tF,xF) ((xF - q_tf).' * Qf * (xF - q_tf));
 %problem.func.bndCst = @(t0,x0,tF,xF) bndCstPendubot(t0,x0,tF,xF,q_tf);

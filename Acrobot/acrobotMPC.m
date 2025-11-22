@@ -231,7 +231,7 @@ title('CONTROLS')
 L1 = p.l1;
 L2 = p.l2;  
 fps = 100;       
-skip = round(length(t)/(fps*10));  
+skip = round(length(t)/(fps*50));  
 
 figure; hold on;
 axis equal;
