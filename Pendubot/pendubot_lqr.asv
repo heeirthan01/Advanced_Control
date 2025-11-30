@@ -71,7 +71,6 @@ clear q1 q2 q1d q2d u1
 
 x_traj = zeros(steps,4);
 u_traj = zeros(steps,1);
-Ksim = zeros(steps,4);
 
 eqb = [pi/2;0;0;0];
 
@@ -98,7 +97,6 @@ for i = 2:steps
         x(4)-q2dref(i)];
     else
         %A bit more stable when used, but not really needed!
-        disp('In second')
         A = A_fun(eqb(1), eqb(2), eqb(3), eqb(4), 0);
         B = B_fun(eqb(1), eqb(2), eqb(3), eqb(4), 0);
 
@@ -113,7 +111,7 @@ for i = 2:steps
     B = dt * B;
     K = dlqr(A,B,Q,R);
 
-    Ksim(i,:) = K;
+
     
     u = uref(i) - K * x_err;
     u = max(-u_max, min(u_max, u));
@@ -128,7 +126,7 @@ for i = 2:steps
 
 end
 
-save('Klqr.mat','Ksim')
+
 %% Plotting
 
 t = (0:steps-1) * dt;
