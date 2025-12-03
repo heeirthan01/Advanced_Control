@@ -54,10 +54,11 @@ R = 1;
 
 
 for i = 2:steps
-    if (norm(pos(1) - q1_d) > 0.2)
+    if (norm(pos(1) - q1_d) > 0.3)
         u = q1dd_d + kd*(-x(2)) + kp*(-x(1)); % control law
     
     else
+        disp('Controller 2')
         %A bit more stable when used, but not really needed!
         A = A_fun(lqr_eqb(1), lqr_eqb(2), lqr_eqb(3), lqr_eqb(4), 0);
         B = B_fun(lqr_eqb(1), lqr_eqb(2), lqr_eqb(3), lqr_eqb(4), 0);

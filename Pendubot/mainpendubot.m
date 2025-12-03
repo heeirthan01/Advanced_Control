@@ -3,30 +3,32 @@ clear
 close all
 
 %Params
-params_pend; %load params
+real_params_pend; %load params
 
 q1_bnd = [-2*pi;2*pi];
 q2_bnd = q1_bnd;
 q1d_bnd = [-inf, inf];
 q2d_bnd = q1d_bnd;
-u_bnd = [-20, 20];  
+%u_bnd = [-20, 20];  
+u_bnd = [-10, 10];
 q_ic = [-pi/2;0;0;0];
 q_tf = [pi/2;0;0;0];
 
 t0 = 0.0;
-tF = 4.0;
+tF = 2.0;
 %Initial guess
 T1 = t0 + 0.25*(tF-t0);
 T2 = t0 + 0.75 *(tF-t0);
 Xstart = [-pi/2,0,0,0];
 Xend = [pi/2,0,0,0];
-X1 = [-pi/4,0,0,0];
+X1 = [-3*pi/4,0,0,0];
 X2 = [pi/4,0,0,0];
 
 %dynamics roll and cost fcn
-problem.func.dynamics = @(t, x, u)(dx_pb(t,x,u,p));
+problem.func.dynamics = @(t, x, u)(dx_pbreal(t,x,u,p));
 Qf = diag([50, 50, 2000, 2000]);
-problem.func.pathObj = @(t,x,u) (0*u.^2 + 1); %minimize torque
+%Qf = diag([1, 1, 1, 1]);
+problem.func.pathObj = @(t,x,u) (0*u.^2 + 1); %minimize time
 %problem.func.bndObj = [];
 problem.func.bndObj = @(t0,x0,tF,xF) ((xF - q_tf).' * Qf * (xF - q_tf));
 %problem.func.bndCst = @(t0,x0,tF,xF) bndCstPendubot(t0,x0,tF,xF,q_tf);
@@ -62,7 +64,7 @@ problem.guess.control = [0, 0, 0, 0];
 problem.option.method = 'trapezoid';
 
 %problem.option.trapezoid.nGrid = 60;
-%problem.option.defaultAccuracy = 'high';
+problem.option.defaultAccuracy = 'high';
 problem.options.nlpOpt = optimset( ...
     'FunValCheck', 'on',...
     'display', 'iter', ...
@@ -81,11 +83,11 @@ q2 = soln.grid.state(2,:);
 q1d = soln.grid.state(3,:);
 q2d = soln.grid.state(4,:);
 u = soln.grid.control;
-% save('q1ref_PB.mat', 'q1')
-% save('q2ref_PB.mat', 'q2')
-% save('q1dref_PB.mat', 'q1d')
-% save('q2dref_PB.mat', 'q2d')
-% save('uref_PB.mat', 'u')
+save('q1ref_PBreal.mat', 'q1')
+save('q2ref_PBreal.mat', 'q2')
+save('q1dref_PBreal.mat', 'q1d')
+save('q2dref_PBreal.mat', 'q2d')
+save('uref_PBreal.mat', 'u')
 
 
 figure; clf;
@@ -124,7 +126,7 @@ X0 = soln.interp.state(0);
 tsPan = [soln.grid.time(1), soln.grid.time(end)];
 
 S = odeset('RelTol',1e-6,'AbsTol',1e-6);  % low resolution
-[tout,xout] = ode45(@(t,x) dx_pb(t,x,soln.interp.control(t),p),tsPan,X0,S);
+[tout,xout] = ode45(@(t,x) dx_pbreal(t,x,soln.interp.control(t),p),tsPan,X0,S);
 xout(:,1:2) = unwrap(xout(:,1:2));
 q1sim = xout(:,1);
 q2sim = xout(:, 2);
@@ -154,32 +156,32 @@ title('ODE vs TO u')
 legend('ODE', 'TO')
 
 %% Animate Pendubot
-L1 = p.l1;
-L2 = p.l2;  
-fps = 100;       
-skip = round(length(tout)/(fps*5));  
-
-figure; hold on;
-axis equal;
-axis([-L1-L2, L1+L2, -L1-L2, L1+L2]);
-grid on;
-title('Pendubot Swing-Up');
-xlabel('X');
-ylabel('Y');
-
-for k = 1:skip:length(tout)
-    q1 = xout(k,1);
-    q2 = xout(k,2);
-    
-    %model x,y tips
-    x1 = L1*cos(q1);
-    y1 = L1*sin(q1);
-    x2 = x1+L2*cos(q1+q2);
-    y2 = y1+L2*sin(q1+q2);
-
-    cla;
-    plot([0 x1 x2],[0 y1 y2],'-o','LineWidth',2,'MarkerFaceColor','k');
-    plot(0,0,'ks','MarkerSize',10,'MarkerFaceColor','k'); 
-    title(sprintf('Time = %.2f s', tout(k)));
-    drawnow;
-end
+% L1 = p.l1;
+% L2 = p.l2;  
+% fps = 100;       
+% skip = round(length(tout)/(fps*5));  
+% 
+% figure; hold on;
+% axis equal;
+% axis([-L1-L2, L1+L2, -L1-L2, L1+L2]);
+% grid on;
+% title('Pendubot Swing-Up');
+% xlabel('X');
+% ylabel('Y');
+% 
+% for k = 1:skip:length(tout)
+%     q1 = xout(k,1);
+%     q2 = xout(k,2);
+% 
+%     %model x,y tips
+%     x1 = L1*cos(q1);
+%     y1 = L1*sin(q1);
+%     x2 = x1+L2*cos(q1+q2);
+%     y2 = y1+L2*sin(q1+q2);
+% 
+%     cla;
+%     plot([0 x1 x2],[0 y1 y2],'-o','LineWidth',2,'MarkerFaceColor','k');
+%     plot(0,0,'ks','MarkerSize',10,'MarkerFaceColor','k'); 
+%     title(sprintf('Time = %.2f s', tout(k)));
+%     drawnow;
+% end
