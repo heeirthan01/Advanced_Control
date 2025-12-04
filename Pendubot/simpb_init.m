@@ -31,11 +31,11 @@ q2dref = interp1(t_ref, q2dref, t_sim, 'pchip');
 uref = interp1(t_ref, uref, t_sim, 'pchip');
 size(uref)
 
-Q = diag([150,250,100,200]);
-R = 50;
+Q = diag([150,250,8,10]);
+R = 150;
 eqb = [pi/2;0;0;0];
 u_max = 10;
-
+x0 = [-(pi/2);0;0;0];
 %%INitialize variables for linearization
 syms q1 q2 q1d q2d u1 real
 q = [q1; q2; q1d; q2d];
@@ -48,10 +48,10 @@ A_fun = matlabFunction(A_sym,'File', 'Afunfile','Vars', {q1, q2, q1d, q2d, u1});
 B_fun = matlabFunction(B_sym, 'File', 'Bfunfile', 'Vars', {q1, q2, q1d, q2d, u1});
 clear q1 q2 q1d q2d u1 
 
-pvar = 0;
+pvar = 1e-9;
 pNoise = diag([pvar,pvar,pvar,pvar]);
 
-mvar = 1e-4;
-mNoise = diag([mvar,100*mvar]);
+mvar = 1e-9;
+mNoise = diag([mvar,mvar]);
 
 initvar = 1e-6; %confidence in IC
