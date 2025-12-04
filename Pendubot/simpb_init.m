@@ -1,3 +1,6 @@
+clc;
+clear;
+close all;
 real_params_pend;
 
 q1ref = load('q1ref_PBreal.mat', 'q1');
@@ -45,8 +48,10 @@ A_fun = matlabFunction(A_sym,'File', 'Afunfile','Vars', {q1, q2, q1d, q2d, u1});
 B_fun = matlabFunction(B_sym, 'File', 'Bfunfile', 'Vars', {q1, q2, q1d, q2d, u1});
 clear q1 q2 q1d q2d u1 
 
-pvar = 1e-6;
+pvar = 0;
 pNoise = diag([pvar,pvar,pvar,pvar]);
+
 mvar = 1e-4;
-mNoise = diag([mvar,mvar]);
-initvar = 1e-20;
+mNoise = diag([mvar,100*mvar]);
+
+initvar = 1e-6; %confidence in IC

@@ -1,2 +1,2 @@
 function y = measurementFcn(x)
-y = [x(1);x(2)];
+y = [wrapToPi(x(1));wrapToPi(x(2))];
