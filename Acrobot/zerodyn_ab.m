@@ -5,13 +5,13 @@ params_pend;
 tF = 20;
 step = 0.1; 
 xpos = -pi:step:pi;
+tsPan = [0, tF];
+dt = 0.001;
+S = odeset('RelTol',1e-8,'AbsTol',1e-8);  % low resolution
 figure;
 hold on;
 for i =1:length(xpos)
     X0 = [xpos(i);0];
-    tsPan = [0, tF];
-    dt = 0.001;
-    S = odeset('RelTol',1e-8,'AbsTol',1e-8);  % low resolution
     [tout,xout] = ode45(@(t,x) dx_abZD(t,x,p),tsPan,X0,S);
     
     q2traj = xout(:,1);
