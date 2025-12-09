@@ -18,7 +18,7 @@ q2dref = q2dref.q2d;
 uref = uref.u;
 ulqr = ulqr.u_traj;
 Ksim = Ksim.Ksim;
-dt = 0.01;
+dt = 0.001;
 totalsim = 2;
 steps = totalsim /dt;
 
@@ -51,7 +51,7 @@ clear q1 q2 q1d q2d u1
 pvar = 1e-9;
 pNoise = diag([pvar,pvar,pvar,pvar]);
 
-mvar = 1e-9;
+mvar = 1e-6;
 mNoise = diag([mvar,mvar]);
 
 initvar = 1e-6; %confidence in IC

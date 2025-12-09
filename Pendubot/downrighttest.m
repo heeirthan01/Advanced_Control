@@ -9,7 +9,7 @@ Q = diag([15,15,1,1]);
 R = 50;
 eqb = [-pi/2;0;0;0];
 u_max = 10;
-dt = 0.01;
+dt = 0.001;
 %%INitialize variables for linearization
 syms q1 q2 q1d q2d u1 real
 q = [q1; q2; q1d; q2d];
@@ -32,7 +32,7 @@ K = dlqr(A,B,Q,R)
 pvar = 0;
 pNoise = diag([pvar,pvar,pvar,pvar]);
 
-mvar = 10;
+mvar = 1e-3;
 mNoise = diag([mvar,mvar]);
 
 initvar = 1e-6; %confidence in IC
